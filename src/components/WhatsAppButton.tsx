@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { MessageCircle } from "lucide-react";
 
 const WhatsAppButton = () => {
@@ -18,4 +19,4 @@ const WhatsAppButton = () => {
   );
 };
 
-export default WhatsAppButton;
+export default memo(WhatsAppButton);

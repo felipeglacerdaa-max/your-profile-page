@@ -1,4 +1,5 @@
 import heroMockup from "@/assets/hero-mockup.jpg";
+import { memo } from "react";
 import { Instagram, MessageCircle } from "lucide-react";
 
 const HeroSection = () => {
@@ -62,4 +63,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default memo(HeroSection);

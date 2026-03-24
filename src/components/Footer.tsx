@@ -1,4 +1,5 @@
 import logo from "@/assets/logo-presenca.png";
+import { memo } from "react";
 import { Instagram, MessageCircle } from "lucide-react";
 
 const Footer = () => (
@@ -35,4 +36,4 @@ const Footer = () => (
   </footer>
 );
 
-export default Footer;
+export default memo(Footer);

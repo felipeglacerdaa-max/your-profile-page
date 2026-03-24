@@ -6,7 +6,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Star, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { memo } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 const testimonials = [
   {
@@ -30,17 +31,7 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.1 });
 
   return (
     <section ref={ref} id="depoimentos" className="py-24 md:py-32 overflow-hidden">
@@ -96,4 +87,4 @@ const TestimonialsSection = () => {
   );
 };
 
-export default TestimonialsSection;
+export default memo(TestimonialsSection);

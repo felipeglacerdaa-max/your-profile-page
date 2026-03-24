@@ -1,22 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { memo, useState, useRef } from "react";
 import { Send, CheckCircle } from "lucide-react";
 import emailjs from '@emailjs/browser';
+import { useInView } from "@/hooks/use-in-view";
 
 const ContactForm = () => {
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [phone, setPhone] = useState("");
-  const ref = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.1 });
 
   const formatPhone = (value: string) => {
     const numbers = value.replace(/\D/g, "");
@@ -167,4 +158,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default memo(ContactForm);

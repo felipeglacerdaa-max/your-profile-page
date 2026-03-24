@@ -1,7 +1,8 @@
 import portfolio1 from "@/assets/portfolio-1.jpg";
 import portfolio2 from "@/assets/portfolio-2.jpg";
 import portfolio3 from "@/assets/portfolio-3.jpg";
-import { useEffect, useRef, useState } from "react";
+import { memo } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 const projects = [
   { image: portfolio1, title: "Site Corporativo", category: "Institucional" },
@@ -10,17 +11,7 @@ const projects = [
 ];
 
 const PortfolioSection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.2 });
 
   return (
     <section ref={ref} id="portfolio" className="py-24 md:py-32 bg-secondary/40">
@@ -67,4 +58,4 @@ const PortfolioSection = () => {
   );
 };
 
-export default PortfolioSection;
+export default memo(PortfolioSection);

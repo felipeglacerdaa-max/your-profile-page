@@ -1,7 +1,16 @@
 import logo from "@/assets/logo-presenca.png";
 import { Instagram, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
+
+const navLinks = [
+  { href: "#servicos", label: "Serviços" },
+  { href: "#portfolio", label: "Portfólio" },
+  { href: "#processo", label: "Processo" },
+  { href: "#depoimentos", label: "Depoimentos" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#contato", label: "Orçamento", special: true },
+];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -16,13 +25,16 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-6">
-          <a href="#servicos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Serviços</a>
-          <a href="#portfolio" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Portfólio</a>
-          <a href="#processo" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Processo</a>
-          <a href="#depoimentos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Depoimentos</a>
-          <a href="#faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
-          <a href="#contato" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-primary font-bold">Orçamento</a>
-          
+          {navLinks.map(({ href, label, special }) => (
+            <a
+              key={href}
+              href={href}
+              className={`text-sm font-medium transition-colors ${special ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              {label}
+            </a>
+          ))}
+
           <div className="flex items-center gap-4 ml-2 pl-6 border-l border-border/50">
             <ThemeToggle />
             <a
@@ -50,10 +62,16 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg animate-fade-in text-center">
           <div className="container py-8 flex flex-col gap-6">
-            <a href="#servicos" onClick={() => setOpen(false)} className="text-lg font-medium text-muted-foreground hover:text-foreground">Serviços</a>
-            <a href="#portfolio" onClick={() => setOpen(false)} className="text-lg font-medium text-muted-foreground hover:text-foreground">Portfólio</a>
-            <a href="#depoimentos" onClick={() => setOpen(false)} className="text-lg font-medium text-muted-foreground hover:text-foreground">Depoimentos</a>
-            <a href="#faq" onClick={() => setOpen(false)} className="text-lg font-medium text-muted-foreground hover:text-foreground">FAQ</a>
+            {navLinks.map(({ href, label }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="text-lg font-medium text-muted-foreground hover:text-foreground"
+              >
+                {label}
+              </a>
+            ))}
             <a
               href="https://www.instagram.com/presenca__pro/"
               target="_blank"
@@ -70,4 +88,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

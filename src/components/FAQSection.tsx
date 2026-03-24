@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useEffect, useRef, useState } from "react";
+import { memo } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 const faqs = [
   {
@@ -26,17 +27,7 @@ const faqs = [
 ];
 
 const FAQSection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.1 });
 
   return (
     <section ref={ref} id="faq" className="py-24 md:py-32 bg-secondary/20">
@@ -67,4 +58,4 @@ const FAQSection = () => {
   );
 };
 
-export default FAQSection;
+export default memo(FAQSection);

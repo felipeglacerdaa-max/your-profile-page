@@ -1,18 +1,9 @@
 import { MessageCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { memo } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 const CTASection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.3 });
 
   return (
     <section ref={ref} className="py-24 md:py-32">
@@ -42,4 +33,4 @@ const CTASection = () => {
   );
 };
 
-export default CTASection;
+export default memo(CTASection);

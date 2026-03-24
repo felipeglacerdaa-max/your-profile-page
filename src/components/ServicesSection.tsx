@@ -1,5 +1,6 @@
 import { Globe, Smartphone, Zap, Palette } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { memo } from "react";
+import { useInView } from "@/hooks/use-in-view";
 
 const services = [
   {
@@ -25,17 +26,7 @@ const services = [
 ];
 
 const ServicesSection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, inView: visible } = useInView({ threshold: 0.2 });
 
   return (
     <section ref={ref} id="servicos" className="py-24 md:py-32">
@@ -74,4 +65,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default memo(ServicesSection);

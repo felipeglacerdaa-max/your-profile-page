@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -24,4 +25,4 @@ const ThemeToggle = () => {
   );
 };
 
-export default ThemeToggle;
+export default memo(ThemeToggle);
