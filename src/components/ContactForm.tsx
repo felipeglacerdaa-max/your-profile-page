@@ -40,8 +40,11 @@ const ContactForm = () => {
         message: formData.get("message") as string,
       };
 
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3002";
-      const response = await fetch(`${apiUrl}/api/contact`, {
+      // Usar /api/contact que funciona tanto em dev (localhost:3002) quanto em produção (Vercel)
+      const apiUrl = import.meta.env.VITE_API_URL || "/api";
+      const endpoint = apiUrl === "/api" ? "/api/contact" : `${apiUrl}/api/contact`;
+      
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
