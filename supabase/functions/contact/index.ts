@@ -30,6 +30,8 @@ async function sendEmailViaEmailJS(
     },
   };
 
+  console.log("📧 Enviando email via EmailJS...");
+  
   const response = await fetch(emailjsUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -38,7 +40,7 @@ async function sendEmailViaEmailJS(
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`EmailJS error: ${error}`);
+    throw new Error(`EmailJS error: ${response.status} - ${error}`);
   }
 
   return await response.json();
@@ -52,6 +54,8 @@ async function saveContact(
   phone: string,
   message: string
 ) {
+  console.log("💾 Salvando contato no banco...");
+  
   const { data, error } = await supabase.from("contacts").insert([
     {
       name,
@@ -67,6 +71,8 @@ async function saveContact(
 }
 
 serve(async (req) => {
+  console.log(`📨 Requisição recebida: ${req.method}`);
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -83,6 +89,8 @@ serve(async (req) => {
   try {
     const body = await req.json();
     const { name, email, phone, message } = body;
+    
+    console.log(`Dados recebidos: ${name}, ${email}, ${phone}`);
 
     // Validação
     if (!name || !email || !phone || !message) {
@@ -114,17 +122,22 @@ serve(async (req) => {
     }
 
     // Criar cliente Supabase
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Variáveis de ambiente do Supabase não configuradas");
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Salvar no banco de dados
-    console.log("💾 Salvando contato no Supabase...");
     await saveContact(supabase, name, email, phone, message);
 
     // Enviar email
-    console.log("📧 Enviando email via EmailJS...");
     await sendEmailViaEmailJS(name, email, phone, message);
+
+    console.log("✅ Contato processado com sucesso!");
 
     return new Response(
       JSON.stringify({
@@ -137,11 +150,11 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error("❌ Erro:", error.message);
+    console.error("❌ Erro:", error?.message || String(error));
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || "Erro ao processar requisição",
+        error: error?.message || "Erro ao processar requisição",
       }),
       {
         status: 500,
