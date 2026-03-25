@@ -40,9 +40,11 @@ const ContactForm = () => {
         message: formData.get("message") as string,
       };
 
-      // Usar /api/contact que funciona tanto em dev (localhost:3002) quanto em produção (Vercel)
-      const apiUrl = import.meta.env.VITE_API_URL || "/api";
-      const endpoint = apiUrl === "/api" ? "/api/contact" : `${apiUrl}/api/contact`;
+      // Usar Supabase Edge Function em produção, ou servidor Express em dev
+      const endpoint = 
+        import.meta.env.MODE === 'production'
+          ? 'https://uoceecsreeiemovrdweo.functions.supabase.co/contact'
+          : 'http://localhost:3002/api/contact';
       
       const response = await fetch(endpoint, {
         method: "POST",

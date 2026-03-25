@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "env": {
+    "default": {
+      "SUPABASE_URL": "https://uoceecsreeiemovrdweo.supabase.co",
+      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvY2VlY3NyZWVpZW1vdnJkd2VvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDQwMDg2NSwiZXhwIjoyMDg5OTc2ODY1fQ.CHANGEME",
+      "EMAILJS_SERVICE_ID": "service_b3w3ggq",
+      "EMAILJS_TEMPLATE_ID": "template_mo7gme9",
+      "EMAILJS_PUBLIC_KEY": "sWfQhVPETYl48Zzpv",
+      "EMAILJS_PRIVATE_KEY": "4ubbvFfiFO6TMsTBx2KDK",
+      "EMAILJS_TO_EMAIL": "presencaproo@hotmail.com"
+    }
+  }
+}
