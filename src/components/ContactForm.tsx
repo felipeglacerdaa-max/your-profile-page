@@ -40,7 +40,8 @@ const ContactForm = () => {
         message: formData.get("message") as string,
       };
 
-      const response = await fetch("http://localhost:3002/api/contact", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3002";
+      const response = await fetch(`${apiUrl}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,6 +54,7 @@ const ContactForm = () => {
         throw new Error(errorData.error || "Erro ao enviar o formulário");
       }
 
+      const result = await response.json();
       setStatus("success");
       setPhone("");
       if (formRef.current) {
@@ -60,7 +62,16 @@ const ContactForm = () => {
       }
     } catch (err) {
       console.error("Erro ao enviar formulário:", err);
-      setError(err instanceof Error ? err.message : "Erro ao enviar o formulário");
+      
+      let errorMessage = "Erro ao enviar o formulário";
+      
+      if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
+        errorMessage = "Servidor não alcançável. Certifique-se que o servidor está rodando (npm run server:dev)";
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
       setStatus("idle");
     }
   };

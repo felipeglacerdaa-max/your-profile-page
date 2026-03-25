@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { sendEmailViaGmail, isGmailConfigured, formatEmailHtml } from './gmailHelper.js';
+import { saveContactToDatabase, isSupabaseConfigured } from './supabaseClient.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => {
     services: {
       gmail: isGmailConfigured() ? '✅ Configurado' : '❌ Não configurado',
       emailjs: process.env.EMAILJS_SERVICE_ID ? '✅ Configurado' : '❌ Não configurado',
+      supabase: isSupabaseConfigured() ? '✅ Configurado' : '❌ Não configurado',
     },
   });
 });
@@ -56,9 +58,19 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    const destinoEmail = 'felipeglacerdaa@hotmail.com';
+    const destinoEmail = 'presencaproo@hotmail.com';
     let emailResult = null;
     let usedService = null;
+
+    // 0️⃣ Salvar no Supabase (se configurado)
+    if (isSupabaseConfigured()) {
+      try {
+        console.log('\n💾 Salvando contato no Supabase...');
+        await saveContactToDatabase(name, email, phone, message);
+      } catch (dbError) {
+        console.warn('⚠️ Erro ao salvar no BD, continuando com email...', dbError.message);
+      }
+    }
 
     // 1️⃣ Tentar enviar via Gmail (se configurado)
     if (isGmailConfigured()) {
